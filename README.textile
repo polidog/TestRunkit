@@ -10,7 +10,6 @@ h2. メソッドを書き換える
 <pre>
 <?php
 require_once('test_runkit.php');
-
 // Hogeクラスのhugaメソッドを書き換える
 TestRunkit::swapMethod('Hoge','huga' );
 if ( Hoge::huga(); ) {
@@ -37,7 +36,6 @@ class Hoge
    }
 
 }
-
 </pre>
 
 実行結果は以下のようになります。
