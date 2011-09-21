@@ -1,0 +1,47 @@
+h1. このクラスについて
+
+人生を楽しく生きる為に、テストを楽にしようということで作りました。
+cakePHPのunitTest書く時に便利だと思います。
+
+
+h1. 簡単な使い方
+
+h2. メソッドを書き換える
+<pre>
+<?php
+require_once('test_runkit.php');
+
+// Hogeクラスのhugaメソッドを書き換える
+TestRunkit::swapMethod('Hoge','huga' );
+if ( Hoge::huga(); ) {
+    echo "書き変わっていません\n";
+}
+else {
+    echo "書き変わりました\n";
+}
+// 元に戻す
+TestRunkit::clearSwapMethod();
+
+if ( Hoge::huga(); ) {
+    echo "もとにもどりました\n";
+}
+else {
+    echo "もどっていません...\n";
+}
+
+
+class Hoge
+{
+   public static function huga() {
+       return true;
+   }
+
+}
+
+</pre>
+
+実行結果は以下のようになります。
+<pre>
+書き変わりました
+もとにもどりました
+</pre>
