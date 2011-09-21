@@ -93,12 +93,6 @@ class TestRunkit
 		if ( !empty( $methods) ) {
 			$removeMethodName = '____swap_____method_______'.$methods['methodName'];
 			
-			// 退避中のメソッドがあるかチェックする
-			if ( !method_exists( $className, $removeMethodName ) ) {
-				throw new Exception('swap method not faund, method name :'.$removeMethodName );
-			}
-			
-			
 			runkit_method_remove( $methods['class'], $methods['methodName'] );
 			runkit_method_copy( $methods['class'], $methods['methodName'], $methods['class'], $removeMethodName );
 			runkit_method_remove( $methods['class'], $removeMethodName );
@@ -133,11 +127,6 @@ class TestRunkit
 		}
 		
 		$targetFunctionName = '____swap_____function_______'.$functionName;
-		
-		// 退避先の関数が定義されているかチェックする
-		if ( !function_exists( $targetFunctionName ) ) {
-			throw new Exception('swap function Duplicate, function name :'.$targetFunctionName );
-		}
 		
 		
 		if ( runkit_function_copy( $functionName, $targetFunctionName ) ) {
