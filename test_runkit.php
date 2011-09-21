@@ -81,7 +81,7 @@ class TestRunkit
 		$methods = array();
 		if ( !is_null( $className ) && !is_null( $methodName) ) {
 			foreach( self::$__swapMethod as $key => $value ) {
-				if ( $value['class'] == $className && $value['methodName'] == $meethodName ) {
+				if ( $value['class'] == $className && $value['methodName'] == $methodName ) {
 					$methods = $value;
 				}
 			}
