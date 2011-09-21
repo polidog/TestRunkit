@@ -2,7 +2,7 @@
 /**
  * テストをしやすく為のツール
  * @author polidog
- * @version 0.1
+ * @version 0.11
  */
 class TestRunkit
 {
@@ -28,11 +28,30 @@ class TestRunkit
 	 */
 	public static function swapMethod( $className, $methodName, $rewriteMethodArgs = '', $rewriteMethod = "return false;" ) {
 		
+		// 指定されたクラスが存在するかチェックする
 		if ( !class_exists( $className ) ) {
 			return false;
 		}
+
+		// 指定されたメソッドが存在するかチェックする
+		if ( !method_exists( $className, $methodName ) ) {
+			return false;
+		}
+		
+		
+		// 既に退避済みかチェックする
+		if ( self::_isSwapMethods( $className, $methodName ) ) {
+			return false;
+		}
+		
 		
 		$toMethodName = '____swap_____method_______'.$methodName;
+		
+		// 退避メソッドがあるかチェックする
+		if ( method_exists( $className, $toMethodName ) ) {
+			throw new Exception('swap method Duplicate, method name :'.$toMethodName );
+		}
+		
 		if ( !runkit_method_copy( $className, $toMethodName, $className, $methodName ) ) {
 			return false;
 		}
@@ -57,7 +76,7 @@ class TestRunkit
 	 * @param string $className
 	 * @param string $methodName
 	 */
-	public function clearSwapMethod( $className = null, $methodName = null) {
+	public static function clearSwapMethod( $className = null, $methodName = null) {
 		
 		$methods = array();
 		if ( !is_null( $className ) && !is_null( $methodName) ) {
@@ -73,6 +92,13 @@ class TestRunkit
 		
 		if ( !empty( $methods) ) {
 			$removeMethodName = '____swap_____method_______'.$methods['methodName'];
+			
+			// 退避中のメソッドがあるかチェックする
+			if ( !method_exists( $className, $removeMethodName ) ) {
+				throw new Exception('swap method not faund, method name :'.$removeMethodName );
+			}
+			
+			
 			runkit_method_remove( $methods['class'], $methods['methodName'] );
 			runkit_method_copy( $methods['class'], $methods['methodName'], $methods['class'], $removeMethodName );
 			runkit_method_remove( $methods['class'], $removeMethodName );
@@ -83,11 +109,18 @@ class TestRunkit
 		
 	}
 	
+	public static function clearSwapMethodAll() {
+		foreach( self::$__swapMethod as $methods ) {
+			self::clearSwapMethod( $methods['class'], $methods['methodName'] );
+		} 
+	}
+	
+	
 	/**
 	 * メソッドを一時退避させる
 	 * @param string $functionName
 	 */
-	public function swapFunction( $functionName, $rewriteFuncArgs = '', $rewriteFunc = 'return false;' ) {
+	public static function swapFunction( $functionName, $rewriteFuncArgs = '', $rewriteFunc = 'return false;' ) {
 		if ( !function_exists( $functionName ) ) {
 			return false;
 		}
@@ -100,6 +133,12 @@ class TestRunkit
 		}
 		
 		$targetFunctionName = '____swap_____function_______'.$functionName;
+		
+		// 退避先の関数が定義されているかチェックする
+		if ( !function_exists( $targetFunctionName ) ) {
+			throw new Exception('swap function Duplicate, function name :'.$targetFunctionName );
+		}
+		
 		
 		if ( runkit_function_copy( $functionName, $targetFunctionName ) ) {
 			if ( runkit_function_redefine( $functionName, $rewriteFuncArgs, $rewriteFunc ) ) {
@@ -114,7 +153,7 @@ class TestRunkit
 	/**
 	 * 退避したメソッドを復活させる
 	 */
-	public function clearSwapFunction( $functionName = null ) {
+	public static function clearSwapFunction( $functionName = null ) {
 		if ( is_null( $functionName ) ) {
 			$functionName = array_pop( self::$__swapFunction );
 		}
@@ -139,4 +178,27 @@ class TestRunkit
 		}
 	}
 	
+	
+	/**
+	 * 退避しているメソッドの一覧を取得する
+	 * @return array
+	 */
+	public static function getSwapMethods() {
+		return self::$__swapMethod;
+	}
+	
+	/**
+	 * 指定したクラス名、メソッド名が退避されているかチェックする
+	 * @param string $className
+	 * @param string $methodName
+	 * @return boolean
+	 */
+	private static function _isSwapMethods( $className, $methodName ) {
+		foreach( self::$__swapMethod as $key => $value ) {
+			if ( $value['class'] == $className && $value['methodName'] == $methodName ) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
