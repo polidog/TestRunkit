@@ -20,15 +20,12 @@ else {
 }
 // 元に戻す
 TestRunkit::clearSwapMethod();
-
 if ( Hoge::huga(); ) {
     echo "もとにもどりました\n";
 }
 else {
     echo "もどっていません...\n";
 }
-
-
 class Hoge
 {
    public static function huga() {
