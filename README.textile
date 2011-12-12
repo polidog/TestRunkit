@@ -27,10 +27,10 @@ require_once('test_runkit.php');
 // Hogeクラスのhugaメソッドを書き換える
 TestRunkit::swapMethod('Hoge','huga' );
 if ( Hoge::huga() ) {
-    echo "書き変わっていません\n";
+    echo "なまくらと申したか\n";
 }
 else {
-    echo "書き変わりました\n";
+    echo "拙者はさような事は...\n";
 }
 // 元に戻す
 TestRunkit::clearSwapMethod();
@@ -47,8 +47,8 @@ else {
 
 実行結果は以下のようになります。
 <pre>
-書き変わりました
-もとにもどりました
+拙者はさような事は...
+なまくらと申したか
 </pre>
 
 h2. 関数を書き換える
