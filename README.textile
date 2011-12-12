@@ -7,7 +7,8 @@ cakePHPのunitTest書く時に便利だと思います。
 h1. 簡単な使い方
 
 h2. メソッドを書き換える
-<pre>
+<pre code="php">
+<?php
 class Hoge
 {
    public static function huga() {
