@@ -8,24 +8,6 @@ h1. 簡単な使い方
 
 h2. メソッドを書き換える
 <pre>
-<?php
-require_once('test_runkit.php');
-// Hogeクラスのhugaメソッドを書き換える
-TestRunkit::swapMethod('Hoge','huga' );
-if ( Hoge::huga(); ) {
-    echo "書き変わっていません\n";
-}
-else {
-    echo "書き変わりました\n";
-}
-// 元に戻す
-TestRunkit::clearSwapMethod();
-if ( Hoge::huga(); ) {
-    echo "もとにもどりました\n";
-}
-else {
-    echo "もどっていません...\n";
-}
 class Hoge
 {
    public static function huga() {
@@ -35,8 +17,55 @@ class Hoge
 }
 </pre>
 
+このHogeクラスのhugaメソッドの戻り値をfalseに変更させていみます。
+
+<pre>
+<?php
+require_once('test_runkit.php');
+// Hogeクラスのhugaメソッドを書き換える
+TestRunkit::swapMethod('Hoge','huga' );
+if ( Hoge::huga() ) {
+    echo "書き変わっていません\n";
+}
+else {
+    echo "書き変わりました\n";
+}
+// 元に戻す
+TestRunkit::clearSwapMethod();
+if ( Hoge::huga() ) {
+    echo "なまくらと申したか\n";
+}
+else {
+    echo "拙者はさような事は...\n";
+}
+
+
+
+</pre>
+
 実行結果は以下のようになります。
 <pre>
 書き変わりました
 もとにもどりました
 </pre>
+
+h2. 関数を書き換える
+
+<pre>
+function runTest() {
+	echo "オラオラオラオラオラ\n";
+}
+</pre>
+
+echoする際に「無駄無駄無駄無駄無駄無駄無駄無駄」に変更する。
+そしてオラオラに戻す。
+
+<pre>
+TestRunkit::swapFunction('runTest','','echo "無駄無駄無駄無駄無駄無駄無駄無駄\n";');
+runTest();
+$reuslt = TestRunkit::clearSwapFunction();
+runTest();
+</pre>
+
+
+なんかあんまり役に立たないかもしれないと思う方も多いかと思いますが、Testコードを書いててモックを使う程じゃないけどー的なところで意外と役に立ちます。
