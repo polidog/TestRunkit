@@ -4,9 +4,29 @@ h1. このクラスについて
 cakePHPのunitTest書く時に便利だと思います。
 
 
+※必ずRunkitを入れておく必要があります。
+Runkitのインストール方法は以下の通り
+<pre>
+git clone https://github.com/zenovich/runkit.git
+phpize
+cd runkit
+./configure
+make
+make install
+
+vi /etc/php.ini
+
+[runkit]
+extension=runkit.so
+runkit.internal_override=1
+
+</pre>
+
+
 h1. 簡単な使い方
 
 h2. メソッドを書き換える
+
 
 <pre code="php">
 <?php
